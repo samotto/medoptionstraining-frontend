@@ -1,0 +1,253 @@
+#authOverlay {
+  background: #000;
+}
+
+.mark svg {
+  width: 30px;
+  height: 30px;
+  fill: currentColor;
+}
+
+.mark.large svg {
+  width: 43px;
+  height: 43px;
+}
+
+nav .icon-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .08);
+  color: #e8f5f7;
+  transition: background .15s, transform .1s;
+}
+
+nav .icon-btn:hover {
+  background: rgba(255, 255, 255, .18);
+}
+
+nav .icon-btn:active {
+  transform: scale(.96);
+}
+
+nav .icon-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+@media (max-width: 600px) {
+  nav .icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+.user-row {
+  width: 100%;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, box-shadow .15s;
+}
+
+.user-row:hover {
+  border-color: #8fbec7;
+  background: #f3f9fa;
+  box-shadow: 0 4px 14px rgba(23, 50, 77, .08);
+}
+
+.course-checklist {
+  margin: 20px 0;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.course-checklist > h3 {
+  margin: 4px 0 8px;
+}
+
+.user-modal-tabs {
+  margin: 0 0 10px;
+}
+
+#dialog > h2 {
+  min-height: 32px;
+  margin: 0 40px 10px 0;
+  line-height: 1.25;
+}
+
+#userAssignmentForm > .user-tab-panel label,
+#newUserForm > .user-tab-panel label {
+  margin: 8px 0;
+}
+
+#userAssignmentForm > .user-tab-panel input,
+#userAssignmentForm > .user-tab-panel select,
+#newUserForm > .user-tab-panel input,
+#newUserForm > .user-tab-panel select {
+  padding: 9px 11px;
+}
+
+#userAssignmentForm > .error:empty,
+#newUserForm > .error:empty {
+  display: none;
+}
+
+#userAssignmentForm > .error:not(:empty),
+#newUserForm > .error:not(:empty) {
+  margin: 8px 0;
+}
+
+#userAssignmentForm > .primary,
+#newUserForm > .primary {
+  margin-top: 6px;
+}
+
+.course-checklist legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+
+.modal label.course-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.modal label.course-check:last-child {
+  border-bottom: 0;
+}
+
+.course-check input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.course-check span {
+  display: grid;
+}
+
+.course-check small {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.settings-email-title {
+  margin: 0 36px 18px 0;
+  overflow-wrap: anywhere;
+  font-size: 22px;
+}
+
+.confirm-overlay {
+  z-index: 7;
+  background: rgba(8, 19, 29, .78);
+}
+
+.confirm-modal {
+  width: min(440px, 100%);
+  text-align: center;
+}
+
+.warning-mark {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #fff0d9;
+  color: #a85a00;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.confirm-modal h2 {
+  margin: 0 0 10px;
+}
+
+.confirm-modal p {
+  color: var(--muted);
+}
+
+.confirm-modal .modal-actions {
+  justify-content: center;
+}
+
+.danger-solid {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: #fff;
+}
+
+.course-modal-tabs {
+  margin: 0 0 12px;
+}
+
+.sortable-list {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+.sortable-lesson {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.sortable-lesson.dragging {
+  opacity: .55;
+  border-color: var(--teal);
+}
+
+.sortable-lesson div {
+  display: grid;
+  min-width: 0;
+}
+
+.sortable-lesson small {
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drag-handle {
+  padding: 4px;
+  color: var(--muted);
+  font-size: 22px;
+  cursor: grab;
+  user-select: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.add-lesson-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.compact-empty {
+  padding: 24px;
+}
