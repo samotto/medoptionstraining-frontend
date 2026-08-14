@@ -1,6 +1,12 @@
 const $ = s => document.querySelector(s),
   $$ = s => [...document.querySelectorAll(s)];
-const state = { user: null, courses: [], lessons: [], users: [] };
+const state = {
+  user: null,
+  courses: [],
+  assignedCourses: [],
+  lessons: [],
+  users: []
+};
 const esc = s =>
   String(s ?? "").replace(
     /[&<>"']/g,
@@ -153,15 +159,20 @@ function hideAuth() {
   $("#authOverlay").hidden = true;
 }
 async function loadCourses() {
-  state.courses = await api.courses();
+  if (state.user.role === "Admin") {
+    [state.courses, state.assignedCourses] = await Promise.all([
+      api.courses(),
+      api.userCourses(state.user.id)
+    ]);
+  } else {
+    state.assignedCourses = await api.userCourses(state.user.id);
+    state.courses = state.assignedCourses;
+  }
   renderCourses();
   if (state.user.role === "Admin") renderAdminCourses();
 }
 function renderCourses() {
-  const q = $("#search").value.toLowerCase();
-  const courses = state.courses.filter(c =>
-    (c.course_title + " " + (c.description || "")).toLowerCase().includes(q)
-  );
+  const courses = state.assignedCourses;
   $("#empty").hidden = !!courses.length;
   $("#courseGrid").innerHTML = courses
     .map(
@@ -184,7 +195,7 @@ function renderCourses() {
   );
 }
 function openCourse(id) {
-  const c = state.courses.find(x => x.id === id);
+  const c = state.assignedCourses.find(x => x.id === id);
   dialog(
     `<p class="eyebrow">Course</p><h2>${esc(c.course_title)}</h2><p>${esc(
       c.description || ""
@@ -933,7 +944,6 @@ $("#logoutBtn").onclick = async () => {
   showAuth();
 };
 $("#userSettingsNav").onclick = openUserSettings;
-$("#search").oninput = renderCourses;
 $("#closeDialog").onclick = closeDialog;
 $("#adminNewCourse").onclick = () => courseForm();
 $("#newLesson").onclick = () => lessonForm();
