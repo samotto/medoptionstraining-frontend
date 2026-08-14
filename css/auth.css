@@ -2,6 +2,18 @@
   background: #000;
 }
 
+#coursesView .hero,
+#adminView .hero {
+  padding: 18px 24px;
+  margin-bottom: 14px;
+}
+
+#coursesView .hero h2,
+#adminView .hero h2 {
+  margin: 0;
+  font-size: 26px;
+}
+
 .mark svg {
   width: 30px;
   height: 30px;
@@ -56,10 +68,91 @@ nav .icon-btn svg {
   transition: background .15s, border-color .15s, box-shadow .15s;
 }
 
+.user-row,
+.lesson-admin-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 11px 14px;
+  gap: 8px;
+}
+
+.compact-primary {
+  flex: 0 0 auto;
+  font-weight: 750;
+}
+
+.compact-secondary {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compact-separator {
+  flex: 0 0 auto;
+  color: #9aa5ab;
+}
+
+.user-row .user-course-progress {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .user-row,
+  .lesson-admin-row {
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  .user-row .compact-secondary,
+  .lesson-admin-row .compact-secondary {
+    flex: 1 1 100%;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .user-row .compact-separator,
+  .lesson-admin-row .compact-separator {
+    display: none;
+  }
+
+  .user-row .user-course-progress {
+    margin-left: 0;
+  }
+}
+
 .user-row:hover {
   border-color: #8fbec7;
   background: #f3f9fa;
   box-shadow: 0 4px 14px rgba(23, 50, 77, .08);
+}
+
+.user-name-line {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.user-course-progress {
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.user-progress-incomplete {
+  color: #861f2b;
+}
+
+.user-progress-complete {
+  color: #17643a;
+}
+
+.user-progress-none {
+  color: #858d93;
 }
 
 .course-checklist {
@@ -144,6 +237,144 @@ nav .icon-btn svg {
   color: var(--muted);
   font-weight: 400;
 }
+
+.assignment-course {
+  display: grid !important;
+  grid-template-columns: auto 1fr auto auto;
+  transition: background .15s, color .15s, opacity .15s;
+}
+
+.course-expand {
+  grid-column: 4;
+  justify-self: end;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: currentColor;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.course-expand:hover {
+  background: rgba(23, 50, 77, .08);
+}
+
+.assignment-lessons {
+  margin: -1px 10px 8px 47px;
+  padding: 6px 12px;
+  border-left: 2px solid var(--line);
+}
+
+.assignment-lesson {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.assignment-lesson:last-child {
+  border-bottom: 0;
+}
+
+.assignment-lesson time {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.lesson-done span {
+  color: #17643a;
+}
+
+.lesson-pending span,
+.lesson-pending time {
+  color: #861f2b;
+}
+
+.assignment-course-copy {
+  min-width: 0;
+}
+
+.course-not-needed {
+  background: #f3f4f5;
+  color: #858d93;
+}
+
+.course-not-needed small {
+  color: #989fa4;
+}
+
+.course-required strong {
+  color: #861f2b;
+}
+
+.course-finished strong {
+  color: #17643a;
+}
+
+.completed-tag {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #dff3e7;
+  color: #17643a;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.incomplete-tag {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #f8dfe2;
+  color: #861f2b;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.assignment-status {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+}
+
+.completion-date {
+  color: #17643a;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lesson-admin-row {
+  width: 100%;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, box-shadow .15s;
+}
+
+.lesson-admin-row:hover {
+  border-color: #8fbec7;
+  background: #f3f9fa;
+  box-shadow: 0 4px 14px rgba(23, 50, 77, .08);
+}
+
+.lesson-form-actions {
+  align-items: center;
+}
+
+.readonly-field {
+  background: #f3f5f6;
+  color: var(--muted);
+  cursor: default;
+}
+
 
 .settings-email-title {
   margin: 0 36px 18px 0;
@@ -250,4 +481,35 @@ nav .icon-btn svg {
 
 .compact-empty {
   padding: 24px;
+}
+
+.completion-check {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 0 !important;
+  color: var(--ink);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.completion-check input {
+  width: 20px;
+  height: 20px;
+  margin: 0 !important;
+}
+
+.progress-save {
+  width: 100%;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .progress-lesson {
+    grid-template-columns: 1fr;
+  }
+
+  .completion-check {
+    white-space: normal;
+  }
 }
