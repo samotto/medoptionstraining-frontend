@@ -163,6 +163,7 @@ body .lesson-admin-row:hover {
 }
 
 nav .icon-btn {
+  position: relative;
   width: 40px;
   height: 40px;
   display: inline-flex;
@@ -188,6 +189,54 @@ nav .icon-btn svg {
   width: 22px;
   height: 22px;
   fill: currentColor;
+}
+
+nav .icon-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 9px);
+  left: 50%;
+  padding: 6px 9px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 6px;
+  background: #102a43;
+  box-shadow: 0 5px 14px rgba(9, 24, 38, .28);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -3px);
+  transition: opacity .15s, transform .15s;
+}
+
+nav .icon-btn:last-child::after {
+  right: 0;
+  left: auto;
+  transform: translateY(-3px);
+}
+
+nav .icon-btn:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+nav .icon-btn:last-child:focus-visible::after {
+  transform: translateY(0);
+}
+
+@media (hover: hover) {
+  nav .icon-btn:hover::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  nav .icon-btn:last-child:hover::after {
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 600px) {
