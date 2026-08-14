@@ -68,7 +68,7 @@ function bindUserModalTabs() {
         box => box.closest(".course-check").dataset.completed === "true"
       );
     courseTab.textContent = isExistingUser
-      ? `Course Assignments (${completed.length} of ${assigned.length} complete)`
+      ? `Courses (${completed.length} of ${assigned.length} complete)`
       : `Course Assignments (${assigned.length} of ${courseBoxes.length})`;
     courseBoxes.forEach(box => {
       const row = box.closest(".course-check"),
@@ -529,15 +529,17 @@ async function loadUsers() {
           progress.assigned === 0
             ? "user-progress-none"
             : progress.completed === progress.assigned
-              ? "user-progress-complete"
-              : "user-progress-incomplete";
+            ? "user-progress-complete"
+            : "user-progress-incomplete";
       return `<button class="list-item user-row" type="button" data-user="${
         u.id
       }"><span class="compact-primary">${esc(
         u.name
       )}</span><span class="compact-separator">·</span><span class="compact-secondary">${esc(
         u.email
-      )} · ${u.role}</span><span class="user-course-progress ${progressClass}">${
+      )} · ${
+        u.role
+      }</span><span class="user-course-progress ${progressClass}">${
         progress.completed
       } of ${progress.assigned} completed</span></button>`;
     })
@@ -656,17 +658,17 @@ async function editUserAssignments(userId) {
   dialog(
     `<h2>${esc(
       u.name
-    )}</h2><form id="userAssignmentForm"><div class="tabs user-modal-tabs"><button type="button" class="active" data-user-tab="details">User Details</button><button type="button" data-user-tab="courses">Course Assignments</button></div><section class="user-tab-panel" data-user-panel="details"><label>Name<input id="editUserName" value="${esc(
+    )}</h2><form id="userAssignmentForm"><div class="tabs user-modal-tabs"><button type="button" class="active" data-user-tab="details">User Details</button><button type="button" data-user-tab="courses">Courses</button></div><section class="user-tab-panel user-details-grid" data-user-panel="details"><label>Name<input id="editUserName" value="${esc(
       u.name
-    )}" required maxlength="120"></label><label>Email<input id="editUserEmail" type="email" value="${esc(
-      u.email
-    )}" required></label><label>Role<select id="editUserRole"><option value="Basic" ${
+    )}" required maxlength="120"></label><label>Role<select id="editUserRole"><option value="Basic" ${
       u.role === "Basic" ? "selected" : ""
     }>Basic</option><option value="Admin" ${
       u.role === "Admin" ? "selected" : ""
     }>Admin</option><option value="Pending" ${
       u.role === "Pending" ? "selected" : ""
-    }>Pending</option></select></label><label>New password<input id="editUserPassword" type="password" minlength="8" maxlength="72" autocomplete="new-password"></label><label>Confirm new password<input id="editUserConfirmPassword" type="password" minlength="8" maxlength="72" autocomplete="new-password"></label></section><section class="user-tab-panel" data-user-panel="courses" hidden><div class="course-checklist"><h3>Assigned courses</h3>${
+    }>Pending</option></select></label><label class="user-detail-wide">Email<input id="editUserEmail" type="email" value="${esc(
+      u.email
+    )}" required></label><label class="user-detail-wide">New password<input id="editUserPassword" type="password" minlength="8" maxlength="72" autocomplete="new-password"></label><label class="user-detail-wide">Confirm new password<input id="editUserConfirmPassword" type="password" minlength="8" maxlength="72" autocomplete="new-password"></label></section><section class="user-tab-panel" data-user-panel="courses" hidden><div class="course-checklist"><h3>Assigned courses</h3>${
       state.courses.length
         ? state.courses
             .map(c => {
@@ -814,6 +816,75 @@ $("#loginForm").onsubmit = async e => {
     showAuth(x.message);
   }
 };
+function showLoginPanel() {
+  $("#authTabs").hidden = false;
+  $("#loginForm").hidden = false;
+  $("#signupForm").hidden = true;
+  $("#forgotPasswordForm").hidden = true;
+  $("#resetPasswordForm").hidden = true;
+  $("#forgotPasswordForm").reset();
+  $("#forgotPasswordError").textContent = "";
+  $("#loginTab").classList.add("active");
+  $("#signupTab").classList.remove("active");
+}
+$("#forgotPasswordLink").onclick = () => {
+  $("#authTabs").hidden = true;
+  $("#loginForm").hidden = true;
+  $("#signupForm").hidden = true;
+  $("#forgotPasswordForm").hidden = false;
+  $("#forgotPasswordEmail").value = $("#loginEmail").value.trim();
+  $("#forgotPasswordEmail").focus();
+};
+$$(".back-to-login").forEach(button => (button.onclick = showLoginPanel));
+$("#forgotPasswordForm").onsubmit = async e => {
+  e.preventDefault();
+  const error = $("#forgotPasswordError"),
+    button = e.target.querySelector(".primary");
+  error.textContent = "";
+  button.disabled = true;
+  button.textContent = "Sending…";
+  try {
+    await api.forgotPassword($("#forgotPasswordEmail").value.trim());
+    showLoginPanel();
+    toast("If that account exists, a reset link has been sent");
+  } catch (x) {
+    error.textContent = x.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = "Send reset link";
+  }
+};
+$("#resetPasswordForm").onsubmit = async e => {
+  e.preventDefault();
+  const password = $("#resetPassword").value,
+    confirmation = $("#resetPasswordConfirm").value,
+    error = $("#resetPasswordError"),
+    token = new URLSearchParams(location.search).get("reset_token"),
+    button = e.target.querySelector(".primary");
+  error.textContent = "";
+  if (password !== confirmation) {
+    error.textContent = "Passwords do not match.";
+    return;
+  }
+  if (!token) {
+    error.textContent = "This password reset link is invalid.";
+    return;
+  }
+  button.disabled = true;
+  button.textContent = "Saving…";
+  try {
+    await api.completePasswordReset(token, password);
+    history.replaceState({}, "", location.pathname);
+    e.target.reset();
+    showLoginPanel();
+    toast("Password updated. You can now log in.");
+  } catch (x) {
+    error.textContent = x.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = "Save new password";
+  }
+};
 $("#signupForm").onsubmit = async e => {
   e.preventDefault();
   const email = $("#signupEmail").value.trim(),
@@ -840,16 +911,16 @@ $("#signupForm").onsubmit = async e => {
   }
 };
 $("#loginTab").onclick = () => {
-  $("#loginForm").hidden = false;
-  $("#signupForm").hidden = true;
+  showLoginPanel();
   $("#signupForm").reset();
   $("#signupError").textContent = "";
-  $("#loginTab").classList.add("active");
-  $("#signupTab").classList.remove("active");
 };
 $("#signupTab").onclick = () => {
+  $("#authTabs").hidden = false;
   $("#loginForm").hidden = true;
   $("#signupForm").hidden = false;
+  $("#forgotPasswordForm").hidden = true;
+  $("#resetPasswordForm").hidden = true;
   $("#signupForm").reset();
   $("#signupError").textContent = "";
   $("#signupTab").classList.add("active");
@@ -888,7 +959,19 @@ $$("[data-tab]").forEach(
     })
 );
 (async () => {
-  const token = new URLSearchParams(location.search).get("verify_token");
+  const params = new URLSearchParams(location.search),
+    token = params.get("verify_token"),
+    resetToken = params.get("reset_token");
+  if (resetToken) {
+    showAuth();
+    $("#authTabs").hidden = true;
+    $("#loginForm").hidden = true;
+    $("#signupForm").hidden = true;
+    $("#forgotPasswordForm").hidden = true;
+    $("#resetPasswordForm").hidden = false;
+    $("#resetPassword").focus();
+    return;
+  }
   try {
     if (token) {
       await api.verify(token);

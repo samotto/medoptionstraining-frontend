@@ -51,6 +51,16 @@
       }),
     verify: token =>
       request("/auth/verify-email", { method: "POST", ...json({ token }) }),
+    forgotPassword: email =>
+      request("/auth/forgot-password", {
+        method: "POST",
+        ...json({ email })
+      }),
+    completePasswordReset: (token, new_password) =>
+      request("/auth/reset-password", {
+        method: "POST",
+        ...json({ token, new_password })
+      }),
     courses: () => request("/courses"),
     createCourse: x => request("/courses", { method: "POST", ...json(x) }),
     updateCourse: (id, x) =>

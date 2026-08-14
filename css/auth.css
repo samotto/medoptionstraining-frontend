@@ -1,5 +1,130 @@
+:root {
+  --navy: #0f375e;
+  --blue: #0f375e;
+  --teal: #e87c1a;
+  --pale: #fff3e8;
+  --ink: #0f375e;
+  --muted: #617181;
+  --line: #d9e1e7;
+}
+
+body {
+  background: #f7f8fa;
+}
+
+header {
+  background: #0f375e;
+}
+
+#coursesView .hero,
+#adminView .hero {
+  border: 1px solid #d9e3ec;
+  border-left: 5px solid #e87c1a;
+  background: linear-gradient(120deg, #eaf1f7, #fff3e8);
+}
+
+.tabs button {
+  border: 1px solid #c7d3dc;
+  border-bottom: 0;
+  border-radius: 7px 7px 0 0;
+  background: #eee;
+}
+
+.tabs button.active {
+  background: #fff;
+  color: #0f375e;
+}
+
+.modal .tabs button {
+  flex: 1;
+}
+
+.primary {
+  background: #0f375e;
+}
+
+.primary:hover {
+  background: #092b4a;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #e87c1a;
+  outline: 3px solid rgba(232, 124, 26, .18);
+}
+
+body .course-card:hover,
+body .user-row:hover,
+body .lesson-admin-row:hover {
+  border-color: #e2a36d;
+}
+
 #authOverlay {
   background: #000;
+}
+
+#authOverlay .modal.auth {
+  padding: 22px 28px;
+}
+
+.brand-logo {
+  display: block;
+  object-fit: cover;
+  border-radius: 999px;
+}
+
+.header-logo {
+  width: 190px;
+  height: 50px;
+}
+
+.auth-logo {
+  width: min(280px, 88%);
+  height: auto;
+  margin: 0 auto;
+}
+
+#authOverlay .modal.auth > h2 {
+  margin: 8px 0 12px;
+  font-size: 23px;
+  line-height: 1.2;
+}
+
+#authOverlay .tabs {
+  margin-bottom: 12px;
+}
+
+#authOverlay .modal label {
+  margin: 9px 0;
+}
+
+#authOverlay .error {
+  margin: 5px 0;
+  min-height: 18px;
+}
+
+#authOverlay .modal form > .primary {
+  margin-top: 4px;
+}
+
+.auth-text-button {
+  display: block;
+  margin: 14px auto 0;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  font-weight: 650;
+}
+
+.auth-text-button:hover {
+  text-decoration: underline;
+}
+
+.modal.auth form > h3 {
+  margin: 4px 0 6px;
+  text-align: center;
 }
 
 #coursesView .hero,
@@ -54,6 +179,15 @@ nav .icon-btn svg {
 }
 
 @media (max-width: 600px) {
+  .header-logo {
+    width: 150px;
+    height: 40px;
+  }
+
+  .brand h1 {
+    font-size: 15px;
+  }
+
   nav .icon-btn {
     width: 44px;
     height: 44px;
@@ -179,6 +313,26 @@ nav .icon-btn svg {
 #userAssignmentForm > .user-tab-panel label,
 #newUserForm > .user-tab-panel label {
   margin: 8px 0;
+}
+
+#userAssignmentForm > .user-details-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 14px;
+}
+
+#userAssignmentForm > .user-details-grid .user-detail-wide {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+  #userAssignmentForm > .user-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #userAssignmentForm > .user-details-grid .user-detail-wide {
+    grid-column: auto;
+  }
 }
 
 #userAssignmentForm > .user-tab-panel input,
