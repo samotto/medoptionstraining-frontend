@@ -800,7 +800,6 @@ async function enter(user) {
   $("#welcome").textContent = "My Training Courses";
   $("#adminNav").hidden = user.role !== "Admin";
   $("#userSettingsNav").hidden = false;
-  $("#newCourse").hidden = user.role !== "Admin";
   await Promise.all([
     loadCourses(),
     user.role === "Admin" ? loadLessons() : Promise.resolve()
@@ -936,7 +935,6 @@ $("#logoutBtn").onclick = async () => {
 $("#userSettingsNav").onclick = openUserSettings;
 $("#search").oninput = renderCourses;
 $("#closeDialog").onclick = closeDialog;
-$("#newCourse").onclick = () => courseForm();
 $("#adminNewCourse").onclick = () => courseForm();
 $("#newLesson").onclick = () => lessonForm();
 $("#newUser").onclick = newUserForm;
