@@ -104,6 +104,18 @@ body .lesson-admin-row:hover {
   min-height: 18px;
 }
 
+#authOverlay .auth-notice {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border: 1px solid #a9d5c9;
+  border-radius: 8px;
+  background: #edf8f4;
+  color: #176451;
+  font-size: 14px;
+  font-weight: 650;
+  text-align: left;
+}
+
 #authOverlay .modal form > .primary {
   margin-top: 4px;
 }

@@ -914,8 +914,10 @@ $("#signupForm").onsubmit = async e => {
   try {
     await api.register($("#signupName").value, email, password);
     e.target.reset();
-    toast("Check your email for the verification link");
     $("#loginTab").click();
+    const notice = $("#authNotice");
+    notice.textContent = "Check your email for a verification email before logging in.";
+    notice.hidden = false;
   } catch (x) {
     error.textContent = x.message;
   }
@@ -926,6 +928,8 @@ $("#loginTab").onclick = () => {
   $("#signupError").textContent = "";
 };
 $("#signupTab").onclick = () => {
+  $("#authNotice").hidden = true;
+  $("#authNotice").textContent = "";
   $("#authTabs").hidden = false;
   $("#loginForm").hidden = true;
   $("#signupForm").hidden = false;
@@ -984,6 +988,12 @@ $$("[data-tab]").forEach(
     if (token) {
       await api.verify(token);
       history.replaceState({}, "", location.pathname);
+      showLoginPanel();
+      showAuth();
+      const notice = $("#authNotice");
+      notice.textContent = "Your email has been verified. Please log in.";
+      notice.hidden = false;
+      return;
     }
     await enter(await api.me());
   } catch {
