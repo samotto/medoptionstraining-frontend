@@ -134,6 +134,10 @@ body .lesson-admin-row:hover {
   text-decoration: underline;
 }
 
+.auth-text-button + .auth-text-button {
+  margin-top: 4px;
+}
+
 .modal.auth form > h3 {
   margin: 4px 0 6px;
   text-align: center;
@@ -717,6 +721,46 @@ nav .icon-btn:last-child:focus-visible::after {
 .progress-save {
   width: 100%;
   margin-top: 10px;
+}
+
+.course-progress-modal {
+  overflow: hidden;
+}
+
+.course-progress-modal #dialog {
+  display: flex;
+  max-height: calc(90vh - 56px);
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.course-progress-modal #dialog > h2,
+.course-progress-modal #dialog > p {
+  flex: 0 0 auto;
+}
+
+.course-progress-modal #courseProgressForm {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.course-progress-lessons {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.course-progress-footer {
+  flex: 0 0 auto;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.course-progress-footer .error {
+  margin: 0;
 }
 
 @media (max-width: 600px) {

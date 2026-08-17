@@ -51,6 +51,11 @@
       }),
     verify: token =>
       request("/auth/verify-email", { method: "POST", ...json({ token }) }),
+    resendVerification: email =>
+      request("/auth/resend-verification", {
+        method: "POST",
+        ...json({ email })
+      }),
     forgotPassword: email =>
       request("/auth/forgot-password", {
         method: "POST",

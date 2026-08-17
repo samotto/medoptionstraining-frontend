@@ -39,13 +39,15 @@ function toast(message) {
   el.classList.add("show");
   setTimeout(() => el.classList.remove("show"), 2400);
 }
-function dialog(html) {
+function dialog(html, modalClass = "") {
   $("#dialog").innerHTML = html;
+  $("#dialogOverlay .modal").className = `modal ${modalClass}`.trim();
   $("#dialogOverlay").hidden = false;
 }
 function closeDialog() {
   $("#dialogOverlay").hidden = true;
   $("#dialog").innerHTML = "";
+  $("#dialogOverlay .modal").className = "modal";
 }
 function bindUserModalTabs() {
   const buttons = $$(".user-modal-tabs button"),
@@ -197,9 +199,9 @@ function renderCourses() {
 function openCourse(id) {
   const c = state.assignedCourses.find(x => x.id === id);
   dialog(
-    `<p class="eyebrow">Course</p><h2>${esc(c.course_title)}</h2><p>${esc(
+    `<h2>${esc(c.course_title)}</h2><p>${esc(
       c.description || ""
-    )}</p><form id="courseProgressForm"><div>${
+    )}</p><form id="courseProgressForm"><div class="course-progress-lessons">${
       c.lessons.length
         ? c.lessons
             .map(
@@ -220,9 +222,10 @@ function openCourse(id) {
         : '<p class="empty">No lessons have been added yet.</p>'
     }</div>${
       c.lessons.length
-        ? '<p id="progressError" class="error"></p><button class="primary progress-save">Save progress</button>'
+        ? '<div class="course-progress-footer"><p id="progressError" class="error"></p><button class="primary progress-save">Save progress</button></div>'
         : ""
-    }</form>`
+    }</form>`,
+    "course-progress-modal"
   );
   if (c.lessons.length) {
     $("#courseProgressForm").onsubmit = async e => {
@@ -266,6 +269,8 @@ function renderAdminCourses() {
           c.id
         }"><div><h3>${esc(c.course_title)}</h3><p>${c.lessons.length} lesson${
           c.lessons.length === 1 ? "" : "s"
+        }, ${c.completed_employees}/${c.assigned_employees} assigned employee${
+          c.assigned_employees === 1 ? "" : "s"
         }</p></div></button>`
     )
     .join("");
@@ -807,6 +812,8 @@ function openUserSettings() {
 
 async function enter(user) {
   state.user = user;
+  $("#resendVerification").hidden = true;
+  $("#resendVerification").dataset.email = "";
   hideAuth();
   $("#welcome").textContent = "My Training Courses";
   $("#adminNav").hidden = user.role !== "Admin";
@@ -824,6 +831,10 @@ $("#loginForm").onsubmit = async e => {
     );
   } catch (x) {
     showAuth(x.message);
+    if (x.status === 403) {
+      $("#resendVerification").dataset.email = $("#loginEmail").value.trim();
+      $("#resendVerification").hidden = false;
+    }
   }
 };
 function showLoginPanel() {
@@ -844,6 +855,26 @@ $("#forgotPasswordLink").onclick = () => {
   $("#forgotPasswordForm").hidden = false;
   $("#forgotPasswordEmail").value = $("#loginEmail").value.trim();
   $("#forgotPasswordEmail").focus();
+};
+$("#resendVerification").onclick = async e => {
+  const button = e.currentTarget,
+    email = button.dataset.email || $("#loginEmail").value.trim(),
+    notice = $("#authNotice");
+  if (!email) return;
+  button.disabled = true;
+  button.textContent = "Sending…";
+  $("#authError").textContent = "";
+  try {
+    await api.resendVerification(email);
+    notice.textContent =
+      "A new verification email has been sent. Check your inbox and spam folder.";
+    notice.hidden = false;
+  } catch (x) {
+    $("#authError").textContent = x.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = "Resend verification email";
+  }
 };
 $$(".back-to-login").forEach(button => (button.onclick = showLoginPanel));
 $("#forgotPasswordForm").onsubmit = async e => {
@@ -918,6 +949,8 @@ $("#signupForm").onsubmit = async e => {
     const notice = $("#authNotice");
     notice.textContent = "Check your email for a verification email before logging in.";
     notice.hidden = false;
+    $("#resendVerification").dataset.email = email;
+    $("#resendVerification").hidden = false;
   } catch (x) {
     error.textContent = x.message;
   }
@@ -930,6 +963,8 @@ $("#loginTab").onclick = () => {
 $("#signupTab").onclick = () => {
   $("#authNotice").hidden = true;
   $("#authNotice").textContent = "";
+  $("#resendVerification").hidden = true;
+  $("#resendVerification").dataset.email = "";
   $("#authTabs").hidden = false;
   $("#loginForm").hidden = true;
   $("#signupForm").hidden = false;
